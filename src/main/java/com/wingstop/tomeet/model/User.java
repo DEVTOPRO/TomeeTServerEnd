@@ -13,7 +13,7 @@ import java.util.Date;
 @Table(name = "user_details", uniqueConstraints = { @UniqueConstraint(columnNames = { "user_name", "mobileNumber" }) })
 @ToString
 @Data
-public class UserDetails extends CommonModel{
+public class User extends CommonModel{
 
     @Column(name="user_id")
     @Id
@@ -35,6 +35,9 @@ public class UserDetails extends CommonModel{
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name="is_admin")
+    private Boolean isAdmin;
+
     @Column(name="data_of_birth")
     private Date dataOfBirth;
 
@@ -51,4 +54,8 @@ public class UserDetails extends CommonModel{
     @Enumerated(EnumType.STRING)
     private EnumContainer.UserVerificationStatus userVerificationStatus ;
 
+
+    public User() {
+
+    }
 }
