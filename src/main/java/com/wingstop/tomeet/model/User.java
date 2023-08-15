@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "user_details", uniqueConstraints = { @UniqueConstraint(columnNames = { "user_name", "mobileNumber" }) })
+@Table(name = "user_details")
 @ToString
 @Data
 public class User extends CommonModel{
@@ -20,13 +20,11 @@ public class User extends CommonModel{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(name="user_name")
+    @Column(name="user_name",unique = true)
     private String userName;
 
-    @Column(name="password")
-    private String password;
 
-    @Column(name = "mobileNumber")
+    @Column(name = "mobileNumber",unique = true)
     private String mobileNumber;
 
     @Column(name = "first_name")

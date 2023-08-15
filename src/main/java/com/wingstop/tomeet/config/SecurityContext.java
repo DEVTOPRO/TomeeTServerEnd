@@ -55,15 +55,48 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors().and().csrf().disable().authorizeRequests()
-                .anyRequest().permitAll().and().exceptionHandling().and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    //    httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .cors()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .csrf()
+                .disable()
+                .formLogin()
+                .disable()
+                .httpBasic()
+                .disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                .and()
+                .authorizeRequests()
+                .antMatchers("/",
+                        "/swagger/**",
+                        "/error",
+                        "/favicon.ico",
+                        "/**/*.png",
+                        "/**/*.gif",
+                        "/**/*.svg",
+                        "/**/*.jpg",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js")
+                .permitAll()
+                .antMatchers("/login","/register","/set_mpin","/verify_token")
+                .permitAll()
+                .anyRequest()
+                .authenticated();
+
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
-    private ApiKey apiKey() { return new ApiKey("JWT", "Authorization",
+
+
+    private ApiKey apiKey() { return new ApiKey("Bearer Token", "Authorization",
             "header"); }
 
     @Override
@@ -81,7 +114,9 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
             .host("localhost:8090")
             .apiInfo(apiInfo())
             .securitySchemes(Arrays.asList(apiKey())) .select()
-            .apis(RequestHandlerSelectors.basePackage("com.wingstop.tomeet")) .paths(PathSelectors.any()) .build(); }
+            .apis(RequestHandlerSelectors.basePackage("com.wingstop.tomeet")) .paths(PathSelectors.any()) .build();
+
+    }
     private ApiInfo apiInfo() { return new ApiInfo( "ToMeet Api's",
             "ToMeet Api's powered by Wingstop Solutions", "V1.0", "Terms of service", new
             Contact("Wimgstop", "www.google.com", "admin@wingstop.com"),

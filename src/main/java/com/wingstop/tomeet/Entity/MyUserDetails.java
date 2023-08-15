@@ -20,7 +20,7 @@ public class MyUserDetails implements UserDetails {
     public MyUserDetails(User user) {
         this.id = user.getUserId();
         this.username = user.getUserName();
-        this.password = user.getPassword();
+        //this.password = user.getPassword();
     }
 
     @Override

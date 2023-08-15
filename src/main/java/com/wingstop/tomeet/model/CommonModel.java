@@ -26,7 +26,7 @@ public abstract class CommonModel {
     private Date updatedTime;
 
     @Column(name="status")
-    private Short status;
+    private Integer status;
 
 
 }
