@@ -28,7 +28,7 @@ import java.util.Collections;
 
 @EnableWebSecurity
 @Configuration
-public class SecurityContext extends WebSecurityConfigurerAdapter {
+public class ToMeetSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JpaUserDetailsService myUserDetailsService;
@@ -86,18 +86,13 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/login","/register","/set_mpin","/verify_token")
+                .antMatchers("/login","/register","/set_mpin","/verify_token","/sample")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
-
-
-
-    private ApiKey apiKey() { return new ApiKey("Bearer Token", "Authorization",
-            "header"); }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -108,20 +103,4 @@ public class SecurityContext extends WebSecurityConfigurerAdapter {
                 "/swagger-ui.html",
                 "/webjars/**");
     }
-
-    @Bean public Docket api() { return new Docket(DocumentationType.SWAGGER_2)
-            //  .host(".machint.com")
-            .host("localhost:8090")
-            .apiInfo(apiInfo())
-            .securitySchemes(Arrays.asList(apiKey())) .select()
-            .apis(RequestHandlerSelectors.basePackage("com.wingstop.tomeet")) .paths(PathSelectors.any()) .build();
-
-    }
-    private ApiInfo apiInfo() { return new ApiInfo( "ToMeet Api's",
-            "ToMeet Api's powered by Wingstop Solutions", "V1.0", "Terms of service", new
-            Contact("Wimgstop", "www.google.com", "admin@wingstop.com"),
-            "License of ToMeet API", "API license URL", Collections.emptyList()); }
-
-
-
 }
