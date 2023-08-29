@@ -86,7 +86,7 @@ public class ToMeetSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/login","/register","/set_mpin","/verify_token","/sample")
+                .antMatchers("/login","/register","/set_mpin","/verify_token","/forgot_pin")
                 .permitAll()
                 .anyRequest()
                 .authenticated();

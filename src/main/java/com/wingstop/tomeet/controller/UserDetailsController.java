@@ -41,6 +41,23 @@ public class UserDetailsController {
     }
     }
 
+    @PostMapping(value = "/forgot_pin")
+    @ApiOperation(value = "Forgot Pin", notes = "Forgot pin")
+    public ResponseEntity<?> forgotPin(@RequestParam("username") String userName) {
+        try {
+            if (null != userName) {
+                return new ResponseEntity<>(userDetailsService.forgotPin(userName), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ResponseObject(500, "Fail", "request object is null", null),
+                        HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            System.out.println(e.fillInStackTrace());
+            return new ResponseEntity<>(new ResponseObject(500, "Fail", e.getLocalizedMessage(), null),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping(value = "/verify_token")
     @ApiOperation(value = "Verify Token", notes = "Verify Token")
     public ResponseEntity<?> verifyToken(@RequestParam("verifyToken") String verifyToken,@RequestParam("userId") Long userId){

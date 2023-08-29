@@ -9,7 +9,9 @@ import java.util.List;
 public interface UserDetailsService {
     ResponseObject saveUser(UserDetailsDto userDetailsDto) throws EmailException;
 
-    ResponseObject verifyToken(String verifyToken,Long userId);
+    ResponseObject forgotPin(String userName) throws EmailException;
+
+    ResponseObject verifyToken(String verifyToken, Long userId);
 
     ResponseObject setMpin(String userName, String password);
 

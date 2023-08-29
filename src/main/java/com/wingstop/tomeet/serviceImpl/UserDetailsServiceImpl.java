@@ -48,13 +48,30 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             userDetails.setGender(EnumContainer.Gender.valueOf(userDetailsDto.getGender()));
             long userId = userDetailsDao.save(userDetails).getUserId();
             this.sendSimpleEmail(userDetails.getUserName(),uuid,userId);
-
             log.info("userDetails",userDetails);
             return new ResponseObject(200, "User has successfully created please check email for registration link ", "success", null);
 
         } else {
             return new ResponseObject(500, "User has already registered with this mail id  ", "success", null);
 
+        }
+
+    }
+
+    @Override
+    public ResponseObject forgotPin(String userName) throws EmailException {
+        Optional<User> userData = userDetailsDao.findByUserName(userName);
+        if (userData.isEmpty()) {
+            return new ResponseObject(500, "User not registered", "success", null);
+        } else {
+            userData.get().setUserVerificationStatus(EnumContainer.UserVerificationStatus.PENDING);
+            String uuid = UUID.nameUUIDFromBytes(userData.get().getUserName().getBytes()).toString();
+            System.out.println("uuid" + uuid);
+            userData.get().setToken(uuid);
+            long userId = userDetailsDao.save(userData.get()).getUserId();
+            this.sendSimpleEmail(userData.get().getUserName(),uuid,userId);
+            log.info("userDetails",userData.get());
+            return new ResponseObject(200, "Please check email for forgot password link ", "success", null);
         }
 
     }
